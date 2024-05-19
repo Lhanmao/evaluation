@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC ".//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.evaluation_system.web.dao.PeopleLikeDao">
+    <!--    下列<if test>标签的参数不能params.name,只能name-->
+    <select id="findBySearch" resultType="com.evaluation_system.web.entity.PeopleLike">
+        select * from peoplelike where user_id=#{user_id} and blog_id=#{blog_id}
+    </select>
+    <select id="findByCollect" resultType="com.evaluation_system.web.entity.PeopleLike">
+        select count(*) as collectNum from peoplelike where blog_id=#{params.blog_id} and collect="1" group by blog_id
+    </select>
+    <select id="findByLike" resultType="com.evaluation_system.web.entity.PeopleLike">
+        select count(*) as likeNum from peoplelike where blog_id=#{params.blog_id} and peolike="1" group by blog_id
+    </select>
+    <select id="findAllBlogLike" resultType="com.evaluation_system.web.entity.PeopleLike">
+        select blog_id,count(*) as likeNum from peoplelike group by blog_id
+    </select>
+    <delete id="delByBolgId">
+        delete from peoplelike where blog_id=#{id}
+    </delete>
+</mapper>

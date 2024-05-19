@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC ".//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.evaluation_system.web.dao.CategoryDao">
+    <!--    下列<if test>标签的参数不能params.name,只能name-->
+    <select id="findBySearch" resultType="com.evaluation_system.web.entity.Category">
+        select * from category
+        <where>
+            <if test="params.name != null and params.name != ''">
+                and name like concat('%',#{ params.name },'%')
+            </if>
+        </where>
+    </select>
+    <select id="findByName" resultType="com.evaluation_system.web.entity.Category">
+        select * from category where name = #{ name } limit 1
+    </select>
+</mapper>

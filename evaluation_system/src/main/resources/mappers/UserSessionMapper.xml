@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC ".//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.evaluation_system.web.dao.UserSessionDao">
+    <!--    下列<if test>标签的参数不能params.name,只能name-->
+    <select id="findBySearch" resultType="com.evaluation_system.web.entity.UserSession">
+        select sessioncontent.id as content_id,usersession.id as id,
+        sessioncontent.content as content,sessioncontent.create_date as create_date,
+        sessioncontent.user_id as user_id,user.user_name as user_name,
+        sessioncontent.target_user_id as target_user_id,target_user.user_name as target_user_name,
+        user.avatar as user_avatar, target_user.avatar as target_user_avatar from usersession
+        right join sessioncontent on usersession.id=sessioncontent.session_id
+        left join user on user.user_id=sessioncontent.user_id
+        left join user as target_user on target_user.user_id=sessioncontent.target_user_id
+        <where>
+            <if test="params.name != null and params.name != ''">
+                and user.user_name like concat('%',#{ params.name },'%')
+            </if>
+            <if test="params.username != null and params.username != ''">
+                and target_user.user_name like concat('%',#{ params.username },'%')
+            </if>
+        </where>
+    </select>
+    <select id="findByCurId" resultType="com.evaluation_system.web.entity.UserSession">
+        select sessioncontent.id as content_id,usersession.id as id,
+        sessioncontent.content as content,sessioncontent.create_date as create_date,
+        sessioncontent.user_id as user_id,user.user_name as user_name,
+        sessioncontent.target_user_id as target_user_id,target_user.user_name as target_user_name,
+        user.avatar as user_avatar, target_user.avatar as target_user_avatar from usersession
+        right join sessioncontent on usersession.id=sessioncontent.session_id
+        left join user on user.user_id=sessioncontent.user_id
+        left join user as target_user on target_user.user_id=sessioncontent.target_user_id
+        <where>
+            <if test="params.session_id != null and params.session_id != ''">
+                and  usersession.id =#{ params.session_id }
+            </if>
+        </where>
+    </select>
+    <select id="findByCurList" resultType="com.evaluation_system.web.entity.UserSession">
+        select usersession.id as id,usersession.user_id as user_id,
+        usersession.target_user_id as target_user_id,u1.user_name as user_name,
+        u1.avatar as user_avatar,u2.user_name as target_user_name,
+        u2.avatar as target_user_avatar from usersession
+        left join user as u1 on u1.user_id=usersession.user_id
+        left join user as u2 on u2.user_id=usersession.target_user_id
+--         where
+        <where>
+              (usersession.user_id=#{params.id} or usersession.target_user_id=#{params.id})
+            <if test="params.name != null and params.name != ''">
+                and u2.user_name like concat('%',#{ params.name },'%')
+            </if>
+        </where>
+
+    </select>
+    <select id="findNewContent" resultType="com.evaluation_system.web.entity.UserSession">
+        select * from sessioncontent where session_id=#{id} order by create_date desc limit 1
+    </select>
+    <select id="findHaveSession" resultType="com.evaluation_system.web.entity.UserSession">
+        select * from usersession where (user_id =#{user_id} or user_id=#{target_user_id})
+                                    and (target_user_id=#{user_id} or target_user_id=#{target_user_id})
+    </select>
+</mapper>

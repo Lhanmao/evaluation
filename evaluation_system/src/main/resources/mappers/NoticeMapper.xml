@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC ".//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.evaluation_system.web.dao.NoticeDao">
+    <select id="findBySearch" resultType="com.evaluation_system.web.entity.Notice">
+        select * from notice
+        <where>
+            <if test="params.title != null and params.title != ''">
+                and title like concat('%',#{ params.title },'%')
+            </if>
+            <if test="params.content != null and params.content != ''">
+                and content like concat('%',#{ params.content },'%')
+            </if>
+        </where>
+    </select>
+    <select id="findAll" resultType="com.evaluation_system.web.entity.Notice">
+        select * from notice order by create_date desc limit 5
+    </select>
+</mapper>

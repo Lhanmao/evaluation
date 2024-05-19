@@ -1,0 +1,10 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #f2f3f5
+}
+
+/*所有的元素都变成盒状模型*/
+* {
+    box-sizing: border-box;
+}

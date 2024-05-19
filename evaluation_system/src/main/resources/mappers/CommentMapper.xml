@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC ".//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.evaluation_system.web.dao.CommentDao">
+    <select id="findAllComment" resultType="com.evaluation_system.web.entity.Comment">
+        select comment.*,blog.title as title,user.user_name as user_name,user.avatar as avatar
+        from comment left join blog on comment.blog_id=blog.id
+        left join user on comment.user_id=user.user_id
+        where comment.blog_id=#{blog_id}
+    </select>
+    <select id="findBySearch" resultType="com.evaluation_system.web.entity.Comment">
+        select comment.*,blog.title as title,user.user_name as user_name from comment left join blog
+        on comment.blog_id=blog.id left join user on comment.user_id=user.user_id
+        <where>
+            <if test="params.content != null and params.content != ''">
+                and comment.content like concat('%',#{ params.content },'%')
+            </if>
+            <if test="params.username != null and params.username != ''">
+                and user_name like concat('%',#{ params.username },'%')
+            </if>
+        </where>
+    </select>
+    <select id="findRecUser" resultType="com.evaluation_system.web.entity.Comment">
+        select c2.*,user.user_name,user.avatar from comment as c1
+        left join comment as c2 on c1.id=c2.target_id
+        left join user on user.user_id = c1.user_id
+        where c2.target_id=#{target} and c2.id is not null
+    </select>
+    <select id="findNum" resultType="com.evaluation_system.web.entity.Comment">
+        select count(*) as allComment from comment where blog_id=#{blog_id} group by blog_id
+    </select>
+    <select id="findCommentNum" resultType="com.evaluation_system.web.entity.Comment">
+        select pid,count(*) as commentNum from comment where blog_id=#{blog_id} and pid!=0 group by pid
+    </select>
+    <delete id="delByBolgId">
+        delete from comment where blog_id=#{id}
+    </delete>
+</mapper>

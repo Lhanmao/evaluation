@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC ".//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.evaluation_system.web.dao.UserDao">
+<!--    &lt;!&ndash;    下列<if test>标签的参数不能params.name,只能name&ndash;&gt;-->
+<!--    <select id="findBySearch" resultType="com.evaluation_system.web.entity.Admin">-->
+<!--        select * from admin-->
+<!--        <where>-->
+<!--            <if test="name != null and name != ''">-->
+<!--                and name like concat('%',#{ name },'%')-->
+<!--            </if>-->
+<!--            <if test="phone != null and phone != ''">-->
+<!--                and phone like concat('%',#{ phone },'%')-->
+<!--            </if>-->
+<!--        </where>-->
+<!--    </select>-->
+<!--    <select id="findByName" resultType="com.evaluation_system.web.entity.Admin">-->
+<!--        select * from admin where name = #{ name } limit 1-->
+<!--    </select>-->
+<!--    <select id="findByNameAndPassword" resultType="com.evaluation_system.web.entity.Admin">-->
+<!--        select * from admin where name = #{ name } and password = #{ password }-->
+<!--    </select>-->
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC ".//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.evaluation_system.web.dao.BlogDao">
+    <!--    下列<if test>标签的参数不能params.name,只能name-->
+    <select id="findBySearch" resultType="com.evaluation_system.web.entity.Blog">
+        select blog.*, category.name as categoryName, user.user_name as userName
+        from blog left join category on blog.category_id = category.id
+        left join user on blog.user_id = user.user_id
+        <where>
+            <if test="params.title != null and params.title != ''">
+                and blog.title like concat('%',#{ params.title },'%')
+            </if>
+            <if test="params.name != null and params.name != ''">
+                and user.user_name like concat('%',#{ params.name },'%')
+            </if>
+            <if test="params.categoryName != null and params.categoryName != ''">
+                and category.name like concat('%',#{ params.categoryName },'%')
+            </if>
+            <if test="params.user_id != null and params.user_id != ''">
+                and blog.user_id = #{ params.user_id }
+            </if>
+            <if test="params.state != null and params.state != ''">
+                and blog.state = #{ params.state }
+            </if>
+        </where>
+    </select>
+    <select id="findHot" resultType="com.evaluation_system.web.entity.Blog">
+        select blog.*,user.user_name as userName from blog
+        left join user on user.user_id=blog.user_id
+        where state=1 order by read_count desc
+    </select>
+    <select id="findById" resultType="com.evaluation_system.web.entity.Blog">
+        select blog.*, category.name as categoryName, user.user_name as userName
+        from blog left join category on blog.category_id = category.id
+                  left join user on blog.user_id = user.user_id where blog.id=#{id}
+    </select>
+    <select id="findBySearchLike" resultType="com.evaluation_system.web.entity.Blog">
+        select blog.*, category.name as categoryName, user.user_name as userName
+        from blog left join category on blog.category_id = category.id
+                  left join user on blog.user_id = user.user_id right join
+             (select blog_id from peoplelike where user_id=#{ params.user_id } and peolike="1")
+                 as mylike on mylike.blog_id=blog.id where blog.id is not null
+    </select>
+    <select id="findBySearchCollect" resultType="com.evaluation_system.web.entity.Blog">
+        select blog.*, category.name as categoryName, user.user_name as userName
+        from blog left join category on blog.category_id = category.id
+                  left join user on blog.user_id = user.user_id right join
+             (select blog_id from peoplelike where user_id=#{ params.user_id } and collect="1")
+                 as mylike on mylike.blog_id=blog.id where blog.id is not null
+    </select>
+    <select id="findDayNum" resultType="com.evaluation_system.web.entity.Blog">
+        select substring_index(date, " ", 1) as newDate, count(*) as dayNum from blog
+        group by newDate order by newDate desc limit 4
+    </select>
+    <select id="findDayBrand" resultType="com.evaluation_system.web.entity.Blog">
+        select category.name as categoryName,count(*) as dayNum from blog left join category on category.id=category_id
+        where (select substring_index(date, " ", 1))=
+              (select substring_index(date, " ", 1) as newDate from  blog
+              group  by newDate ORDER BY newDate desc LIMIT 1)
+        group by category_id;
+    </select>
+    <select id="findAllBrand" resultType="com.evaluation_system.web.entity.Blog">
+        select category.name as categoryName,count(*) as dayNum from blog
+            left join category on blog.category_id=category.id group by blog.category_id
+    </select>
+    <select id="findBySearchMyComment" resultType="com.evaluation_system.web.entity.Blog">
+        select comment.blog_id, blog.*,user.user_name as userName from comment
+        left join blog on comment.blog_id=blog.id
+        left join user on user.user_id=blog.user_id
+        where comment.user_id=#{ params.user_id } group by comment.blog_id
+    </select>
+</mapper>

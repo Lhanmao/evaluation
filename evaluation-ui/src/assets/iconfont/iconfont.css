@@ -1,0 +1,52 @@
+@font-face {
+  font-family: "element-icons";
+  /* Project id 4467363 */
+  src: url('iconfont.woff2?t=1710416957832') format('woff2'),
+    url('iconfont.woff?t=1710416957832') format('woff'),
+    url('iconfont.ttf?t=1710416957832') format('truetype');
+}
+
+.element-icons {
+  font-family: "element-icons" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.el-icon-like:before {
+  content: "\ec7f";
+}
+
+.el-icon-eye:before {
+  content: "\ec86";
+}
+
+.card {
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.2s;
+  width: 68%;
+  height: auto;
+  border-radius: 5px;
+  background-color: #fff;
+  /* margin: auto; */
+  /* text-align: left; */
+}
+
+.card_right {
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.2s;
+  width: 20%;
+  height: auto;
+  border-radius: 5px;
+  background-color: #fff;
+  /* margin: auto; */
+  /* text-align: left; */
+}
+
+.line1 {
+  white-space: nowrap;
+  /* width: 100%; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
